@@ -2,8 +2,21 @@
 clean-html
 ==========
 
-.. image:: https://circleci.com/gh/zytedata/clean-html/tree/master.svg?style=shield&circle-token=893cc11762c086c550a812d6c8bc3e1a1c6f25cb
-    :target: https://circleci.com/gh/zytedata/clean-html/tree/master
+.. image:: https://img.shields.io/pypi/v/clean-html.svg
+   :target: https://pypi.python.org/pypi/clean-html
+   :alt: PyPI Version
+
+.. image:: https://img.shields.io/pypi/pyversions/clean-html.svg
+   :target: https://pypi.python.org/pypi/clean-html
+   :alt: Supported Python Versions
+
+.. image:: https://github.com/zytedata/clean-html/workflows/tox/badge.svg
+   :target: https://github.com/zytedata/clean-html/actions
+   :alt: Build Status
+
+.. image:: https://codecov.io/github/zytedata/clean-html/coverage.svg?branch=master
+   :target: https://codecov.io/gh/zytedata/clean-html
+   :alt: Coverage report
 
 Clean and normalize HTML. Preserve embeddings (e.g. Twitter, Instagram, etc)
 
