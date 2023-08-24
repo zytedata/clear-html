@@ -1,6 +1,12 @@
 Changes
 =======
 
+0.3.0 (YYYY-MM-DD)
+------------------
+
+* Make the project open-source.
+* Fix and update type hints.
+
 0.2.0 (2021-12-07)
 ------------------
 
