@@ -1,7 +1,7 @@
 Changes
 =======
 
-0.3.0 (YYYY-MM-DD)
+0.3.0 (2023-08-24)
 ------------------
 
 * Make the project open-source.
