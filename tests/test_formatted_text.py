@@ -3,9 +3,9 @@ from typing import cast
 import pytest
 from lxml.html import HtmlElement, fromstring, tostring
 
-from clean_html.formatted_text.figures import enclose_media_within_figure
-from clean_html.formatted_text.main import _get_default_cleaner, paragraphy
-from clean_html.formatted_text.utils import drop_tag_preserve_spacing
+from clear_html.formatted_text.figures import enclose_media_within_figure
+from clear_html.formatted_text.main import _get_default_cleaner, paragraphy
+from clear_html.formatted_text.utils import drop_tag_preserve_spacing
 
 
 @pytest.mark.parametrize(

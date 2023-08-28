@@ -4,8 +4,8 @@ from lxml import etree
 from lxml.html import HtmlElement, defs
 from lxml.html.clean import Cleaner
 
-from clean_html.formatted_text.utils import drop_tag_preserve_spacing
-from clean_html.lxml_utils import iter_deep_first_post_order
+from clear_html.formatted_text.utils import drop_tag_preserve_spacing
+from clear_html.lxml_utils import iter_deep_first_post_order
 
 
 class BodyCleaner(Cleaner):

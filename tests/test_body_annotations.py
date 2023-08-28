@@ -3,11 +3,11 @@ from pathlib import Path
 import pytest
 from lxml.html import fromstring
 
-from clean_html import clean_node
-from clean_html.body_annotations import BodyAnnotation, BodyAnnotations
-from clean_html.clean import cleaned_node_to_html, cleaned_node_to_text
-from clean_html.formatted_text import clean_doc
-from clean_html.html_embeddings import integrate_embeddings
+from clear_html import clean_node
+from clear_html.body_annotations import BodyAnnotation, BodyAnnotations
+from clear_html.clean import cleaned_node_to_html, cleaned_node_to_text
+from clear_html.formatted_text import clean_doc
+from clear_html.html_embeddings import integrate_embeddings
 
 FIXTURES_PATH = Path(__file__).parent / "fixtures" / "body_formatting_annotations.json"
 

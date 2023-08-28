@@ -4,7 +4,7 @@ import pytest
 from lxml.etree import tostring
 from lxml.html import HtmlElement
 
-from clean_html.html_embeddings import integrate_embeddings
+from clear_html.html_embeddings import integrate_embeddings
 
 from .utils import string_to_html_element
 

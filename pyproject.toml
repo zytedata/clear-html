@@ -3,7 +3,7 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "clean-html"
+name = "clear-html"
 description = "Clean and normalize HTML."
 authors = [{name = "Zyte Group Ltd", email = "info@zyte.com"}]
 readme = "README.rst"
@@ -30,13 +30,13 @@ dependencies = [
 dynamic = ["version"]
 
 [project.urls]
-Source = "https://github.com/zytedata/clean-html"
+Source = "https://github.com/zytedata/clear-html"
 
 [tool.setuptools.dynamic]
-version = {attr = "clean_html.__version__"}
+version = {attr = "clear_html.__version__"}
 
 [tool.setuptools.package-data]
-clean_html = ["py.typed"]
+clear_html = ["py.typed"]
 
 [tool.isort]
 profile = "black"
@@ -56,7 +56,7 @@ module = [
 [tool.pytest.ini_options]
 junit_family = "xunit2"
 testpaths = [
-    "clean_html",
+    "clear_html",
     "tests",
 ]
 addopts = "--doctest-modules"
