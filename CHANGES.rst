@@ -1,7 +1,7 @@
 Changes
 =======
 
-0.4.0 (YYYY-MM-DD)
+0.4.0 (2023-08-29)
 ------------------
 
 * Rename from ``clean-html`` to ``clear-html`` because of the PyPI name clash
