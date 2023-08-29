@@ -2,16 +2,16 @@ from typing import AbstractSet, Callable, Mapping, Optional
 
 from lxml.html import Element, HtmlElement, fromstring, tostring
 
-from clean_html.formatted_text.defs import MUST_ANCESTORS_FOR_DROP_CONTENT  # noqa: F401
-from clean_html.formatted_text.defs import MUST_ANCESTORS_FOR_KEEP_CONTENT  # noqa: F401
-from clean_html.formatted_text.defs import (
+from clear_html.formatted_text.defs import MUST_ANCESTORS_FOR_DROP_CONTENT  # noqa: F401
+from clear_html.formatted_text.defs import MUST_ANCESTORS_FOR_KEEP_CONTENT  # noqa: F401
+from clear_html.formatted_text.defs import (
     ALLOWED_TAGS,
     CONTENT_EVEN_IF_EMPTY,
     HTML_UNIVERSE_TAGS,
     PHRASING_CONTENT,
     TAG_TRANSLATIONS,
 )
-from clean_html.lxml_utils import (
+from clear_html.lxml_utils import (
     ChildrenSlice,
     has_tail,
     has_text,

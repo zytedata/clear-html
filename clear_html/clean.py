@@ -4,8 +4,8 @@ from typing import Callable, Optional
 import html_text
 from lxml.html import HtmlElement, tostring
 
-from clean_html.formatted_text import clean_doc
-from clean_html.html_embeddings import integrate_embeddings
+from clear_html.formatted_text import clean_doc
+from clear_html.html_embeddings import integrate_embeddings
 
 
 def cleaned_node_to_text(

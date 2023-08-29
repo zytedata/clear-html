@@ -2,7 +2,7 @@ from typing import AbstractSet, List
 
 from lxml.html import HtmlElement, fromstring, tostring  # noqa: F401
 
-from clean_html.lxml_utils import wrap_element_content_with_tag
+from clear_html.lxml_utils import wrap_element_content_with_tag
 
 
 def headings_nodes(doc: HtmlElement) -> List[HtmlElement]:

@@ -40,4 +40,4 @@ Steps:
   - Ensure that not block tags are inside inline tags (this is not allowed).
   - Finally html is formatted a little bit to have a good looking.
 """
-from clean_html.formatted_text.main import clean_doc  # noqa: F401
+from clear_html.formatted_text.main import clean_doc  # noqa: F401

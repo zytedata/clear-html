@@ -3,9 +3,9 @@ from typing import AbstractSet, cast
 from lxml.html import HtmlElement, fromstring, tostring  # noqa: F401
 from lxml.html.clean import Cleaner
 
-from clean_html.formatted_text.cleaner import BodyCleaner
-from clean_html.formatted_text.defs import MUST_ANCESTORS_FOR_KEEP_CONTENT  # noqa: F401
-from clean_html.formatted_text.defs import (
+from clear_html.formatted_text.cleaner import BodyCleaner
+from clear_html.formatted_text.defs import MUST_ANCESTORS_FOR_KEEP_CONTENT  # noqa: F401
+from clear_html.formatted_text.defs import (
     ALLOWED_ATTRIBUTES,
     FIGURE_CAPTION_ALLOWED_TAGS,
     FIGURE_CONTENT_TAGS,
@@ -13,14 +13,14 @@ from clean_html.formatted_text.defs import (
     TRANSPARENT_CONTENT,
     WRAPPED_WITH_FIGURE,
 )
-from clean_html.formatted_text.utils import _test_fn  # noqa: F401
-from clean_html.formatted_text.utils import clean_incomplete_structures  # noqa: F401
-from clean_html.formatted_text.utils import (
+from clear_html.formatted_text.utils import _test_fn  # noqa: F401
+from clear_html.formatted_text.utils import clean_incomplete_structures  # noqa: F401
+from clear_html.formatted_text.utils import (
     drop_tag_preserve_spacing,
     group_with_previous_content_block,
     wrap_tags,
 )
-from clean_html.lxml_utils import (
+from clear_html.lxml_utils import (
     ChildrenSlice,
     ancestors,
     descendants,

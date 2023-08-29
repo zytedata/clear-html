@@ -1,7 +1,7 @@
 import pytest
 from lxml.html import HtmlElement
 
-from clean_html.clean import cleaned_node_to_text
+from clear_html.clean import cleaned_node_to_text
 
 from .utils import string_to_html_element
 

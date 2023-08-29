@@ -1,21 +1,21 @@
 ==========
-clean-html
+clear-html
 ==========
 
-.. image:: https://img.shields.io/pypi/v/clean-html.svg
-   :target: https://pypi.python.org/pypi/clean-html
+.. image:: https://img.shields.io/pypi/v/clear-html.svg
+   :target: https://pypi.python.org/pypi/clear-html
    :alt: PyPI Version
 
-.. image:: https://img.shields.io/pypi/pyversions/clean-html.svg
-   :target: https://pypi.python.org/pypi/clean-html
+.. image:: https://img.shields.io/pypi/pyversions/clear-html.svg
+   :target: https://pypi.python.org/pypi/clear-html
    :alt: Supported Python Versions
 
-.. image:: https://github.com/zytedata/clean-html/workflows/tox/badge.svg
-   :target: https://github.com/zytedata/clean-html/actions
+.. image:: https://github.com/zytedata/clear-html/workflows/tox/badge.svg
+   :target: https://github.com/zytedata/clear-html/actions
    :alt: Build Status
 
-.. image:: https://codecov.io/github/zytedata/clean-html/coverage.svg?branch=master
-   :target: https://codecov.io/gh/zytedata/clean-html
+.. image:: https://codecov.io/github/zytedata/clear-html/coverage.svg?branch=master
+   :target: https://codecov.io/gh/zytedata/clear-html
    :alt: Coverage report
 
 Clean and normalize HTML. Preserve embeddings (e.g. Twitter, Instagram, etc)
@@ -30,7 +30,7 @@ Installation
 
 Install the library with pip::
 
-    pip install clean-html
+    pip install clear-html
 
 Usage
 =====
@@ -40,7 +40,7 @@ Example usage with lxml:
 .. code-block:: python
 
     from lxml.html import fromstring
-    from clean_html import clean_node, cleaned_node_to_html
+    from clear_html import clean_node, cleaned_node_to_html
 
     html="""
             <div style="color:blue" id="main_content">
@@ -59,7 +59,7 @@ Example usage with Parsel:
 .. code-block:: python
 
     from parsel import Selector
-    from clean_html import clean_node, cleaned_node_to_html
+    from clear_html import clean_node, cleaned_node_to_html
 
     selector = Selector(text="""<html>
                                 <body>

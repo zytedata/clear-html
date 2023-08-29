@@ -7,8 +7,8 @@ from urllib.parse import urljoin
 from lxml.html import Element, HtmlElement, tostring  # noqa: F401
 from lxml.html.clean import Cleaner
 
-from clean_html.formatted_text.cleaner import BodyCleaner
-from clean_html.formatted_text.defs import (
+from clear_html.formatted_text.cleaner import BodyCleaner
+from clear_html.formatted_text.defs import (
     ALLOWED_ATTRIBUTES,
     ALLOWED_TAGS,
     CAN_BE_EMPTY,
@@ -16,7 +16,7 @@ from clean_html.formatted_text.defs import (
     MUST_ANCESTORS_FOR_KEEP_CONTENT,
     PHRASING_CONTENT,
 )
-from clean_html.formatted_text.figures import (
+from clear_html.formatted_text.figures import (
     clean_double_br_above_figcaption,
     clean_figcaptions_html,
     create_figures_from_isolated_figcaptions,
@@ -24,15 +24,15 @@ from clean_html.formatted_text.figures import (
     remove_figures_without_content,
     top_level_media_within_figure,
 )
-from clean_html.formatted_text.headings import normalize_headings_level
-from clean_html.formatted_text.utils import (
+from clear_html.formatted_text.headings import normalize_headings_level
+from clear_html.formatted_text.utils import (
     clean_incomplete_structures,
     kill_tag_content,
     remove_empty_tags,
     set_article_tag_as_root,
     translate_tags,
 )
-from clean_html.lxml_utils import has_tail, has_text
+from clear_html.lxml_utils import has_tail, has_text
 
 
 def clean_doc(
@@ -45,7 +45,7 @@ def clean_doc(
     are preserved intact.
 
     See also a description of the overall approach in
-    clean_html/formatted_text/__init__.py
+    clear_html/formatted_text/__init__.py
     """
     if base_url is not None:
         make_links_absolute(doc, base_url)
