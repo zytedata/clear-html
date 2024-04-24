@@ -120,7 +120,11 @@ def paragraphy(doc: HtmlElement):
             if idx == 0 or children[idx - 1].tag != "br" or has_tail(children[idx - 1]):
                 # A br without previous consecutive br was found
                 start = idx
-            if idx == n_children - 1 or children[idx + 1].tag != "br" or has_tail(child):
+            if (
+                idx == n_children - 1
+                or children[idx + 1].tag != "br"
+                or has_tail(child)
+            ):
                 # A br without next consecutive br was found
                 end = idx
                 if start == end:

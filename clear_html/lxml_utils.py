@@ -83,12 +83,16 @@ def prev_text(doc: HtmlElement) -> str:
     parent = doc.getparent()
     if parent is None:
         return ""
-    idx = parent.index(doc)
-    if idx == 0:
-        text = parent.text
+    previous = doc.getprevious()
+    if previous is None:
+        parent = doc.getparent()
+        if parent is None:
+            text = ""
+        else:
+            text = parent.text or ""
     else:
-        text = parent[idx - 1].tail
-    return text or ""
+        text = previous.tail or ""
+    return text
 
 
 def iter_deep_first_post_order(doc: HtmlElement) -> Generator[HtmlElement, Any, None]:

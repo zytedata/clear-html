@@ -157,17 +157,18 @@ def drop_tag_preserve_spacing(doc: HtmlElement, preserve_content=True):
         # carefully add double brs in some cases to
         # respect the separation between text chunks
         # Not known html tags are considered as inline elements by default.
-        idx = parent.index(doc)
+        doc_prev = doc.getprevious()
+        doc_next = doc.getnext()
 
         prev_is_inline = (
-            idx != 0
-            and parent[idx - 1].tag in PHRASING_CONTENT
-            and not _double_br(parent, idx - 2, idx - 1)
+            doc_prev is not None
+            and doc_prev.tag in PHRASING_CONTENT
+            and not _double_br(doc_prev.getprevious())
         )
         after_is_inline = (
-            idx != len(parent) - 1
-            and parent[idx + 1].tag in PHRASING_CONTENT
-            and not _double_br(parent, idx + 1, idx + 2)
+            doc_next is not None
+            and doc_next.tag in PHRASING_CONTENT
+            and not _double_br(doc_next)
         )
 
         has_text_prev = bool(prev_text(doc).strip()) or prev_is_inline
@@ -177,29 +178,28 @@ def drop_tag_preserve_spacing(doc: HtmlElement, preserve_content=True):
         if has_text_prev and (has_text_inside or has_text_after):
             # Insert double br before
             for i in range(2):
-                parent.insert(idx, Element("br"))
-            idx += 2
+                doc.addprevious(Element("br"))
         if has_text_inside and has_text_after:
             # Insert brs after
             last_br = Element("br")
             last_br.tail = doc.tail
             doc.tail = None
-            parent.insert(idx + 1, last_br)
-            parent.insert(idx + 1, Element("br"))
+            doc.addnext(last_br)
+            doc.addnext(Element("br"))
     if preserve_content:
         doc.drop_tag()
     else:
         doc.drop_tree()
 
 
-def _double_br(doc: HtmlElement, start: int, end: int):
-    """True if double br in doc[start:end] (end-start must be 1)"""
-    if end - start != 1:
+def _double_br(doc: Optional[HtmlElement]):
+    """True if doc and next element are "br" tags without text in between."""
+    if doc is None or doc.tag != "br":
         return False
-    if not all(idx >= 0 and idx < len(doc) for idx in (start, end)):
+    doc_next = doc.getnext()
+    if doc_next is None or doc_next.tag != "br":
         return False
-    both_brs = (doc[start].tag == "br") and (doc[end].tag == "br")
-    return both_brs and not has_tail(doc[start])
+    return not has_tail(doc)
 
 
 def has_no_content(doc: HtmlElement) -> bool:
