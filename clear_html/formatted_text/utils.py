@@ -163,12 +163,12 @@ def drop_tag_preserve_spacing(doc: HtmlElement, preserve_content=True):
         prev_is_inline = (
             doc_prev is not None
             and doc_prev.tag in PHRASING_CONTENT
-            and not _double_br(doc_prev.getprevious())
+            and not double_br(doc_prev.getprevious())
         )
         after_is_inline = (
             doc_next is not None
             and doc_next.tag in PHRASING_CONTENT
-            and not _double_br(doc_next)
+            and not double_br(doc_next)
         )
 
         has_text_prev = bool(prev_text(doc).strip()) or prev_is_inline
@@ -192,7 +192,7 @@ def drop_tag_preserve_spacing(doc: HtmlElement, preserve_content=True):
         doc.drop_tree()
 
 
-def _double_br(doc: Optional[HtmlElement]):
+def double_br(doc: Optional[HtmlElement]):
     """True if doc and next element are "br" tags without text in between."""
     if doc is None or doc.tag != "br":
         return False

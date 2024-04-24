@@ -27,6 +27,7 @@ from clear_html.formatted_text.figures import (
 from clear_html.formatted_text.headings import normalize_headings_level
 from clear_html.formatted_text.utils import (
     clean_incomplete_structures,
+    double_br,
     kill_tag_content,
     remove_empty_tags,
     set_article_tag_as_root,
@@ -116,12 +117,10 @@ def paragraphy(doc: HtmlElement):
     start, end = None, None
     for idx, child in enumerate(doc):
         if child.tag == "br":
-            prev_child = child.getprevious()
-            if prev_child is None or prev_child.tag != "br" or has_tail(prev_child):
+            if not double_br(child.getprevious()):
                 # A br without previous consecutive br was found
                 start = idx
-            next_child = child.getnext()
-            if next_child is None or next_child.tag != "br" or has_tail(child):
+            if not double_br(child):
                 # A br without next consecutive br was found
                 end = idx
                 if start == end:
