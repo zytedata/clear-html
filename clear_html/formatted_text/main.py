@@ -111,20 +111,17 @@ def paragraphy(doc: HtmlElement):
     when possible. Document is updated inline.
     """
     # Let's detect the sequences of consecutive br
-    children = list(doc)
-    n_children = len(children)
+    n_children = len(doc)
     br_sequences: List[Tuple[int, int]] = []
     start, end = None, None
-    for idx, child in enumerate(children):
+    for idx, child in enumerate(doc):
         if child.tag == "br":
-            if idx == 0 or children[idx - 1].tag != "br" or has_tail(children[idx - 1]):
+            prev_child = child.getprevious()
+            if prev_child is None or prev_child.tag != "br" or has_tail(prev_child):
                 # A br without previous consecutive br was found
                 start = idx
-            if (
-                idx == n_children - 1
-                or children[idx + 1].tag != "br"
-                or has_tail(child)
-            ):
+            next_child = child.getnext()
+            if next_child is None or next_child.tag != "br" or has_tail(child):
                 # A br without next consecutive br was found
                 end = idx
                 if start == end:
@@ -142,7 +139,7 @@ def paragraphy(doc: HtmlElement):
 
     # Let's split the node into different paragraphs
     br_sequences.append((n_children, n_children))  # To get last chunk included
-    children = [copy.copy(c) for c in children]
+    children = [copy.copy(c) for c in doc]
     del doc[:n_children]
 
     last_inline_chunk: List[HtmlElement] = []
