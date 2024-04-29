@@ -1,6 +1,11 @@
 Changes
 =======
 
+0.4.1 (2024-??-??)
+------------------
+
+* Huge performance improvements on large documents.
+
 0.4.0 (2023-08-29)
 ------------------
 
