@@ -77,7 +77,11 @@ class BodyCleaner(Cleaner):
                     el = to_remove.pop(-1)
                     el.tag = "div"
                     el.attrib.clear()
-                for el in to_remove:
+                # don't hold removed elements in memory to reduce memory usage,
+                # as they are being merged into parent elements
+                to_remove.reverse()
+                while to_remove:
+                    el = to_remove.pop()
                     drop_tag_preserve_spacing(el)
 
     def allow_element(self, el):
