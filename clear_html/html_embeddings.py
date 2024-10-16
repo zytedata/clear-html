@@ -5,7 +5,6 @@
  HTML without change.
 """
 
-
 from typing import Callable, Optional, Set
 
 from lxml import etree
