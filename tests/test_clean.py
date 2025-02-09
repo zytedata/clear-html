@@ -1,13 +1,19 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 import pytest
-from lxml.html import HtmlElement
 
 from clear_html.clean import cleaned_node_to_text
 
 from .utils import string_to_html_element
 
+if TYPE_CHECKING:
+    from lxml.html import HtmlElement
+
 
 @pytest.mark.parametrize(
-    "test_input,expected",
+    ("test_input", "expected"),
     [
         ("<span>text inside</span>", "text inside"),
         ("<div>A<span>value</span></div>", "A value"),

@@ -1,4 +1,6 @@
-from typing import AbstractSet, Optional
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 from lxml import etree
 from lxml.html import HtmlElement, defs
@@ -6,6 +8,9 @@ from lxml.html.clean import Cleaner
 
 from clear_html.formatted_text.utils import drop_tag_preserve_spacing
 from clear_html.lxml_utils import iter_deep_first_post_order
+
+if TYPE_CHECKING:
+    from collections.abc import Set as AbstractSet
 
 
 class BodyCleaner(Cleaner):
@@ -31,7 +36,7 @@ class BodyCleaner(Cleaner):
 
     def __init__(
         self,
-        nodes_whitelist: Optional[AbstractSet[HtmlElement]] = None,
+        nodes_whitelist: AbstractSet[HtmlElement] | None = None,
         allow_data_attrs: bool = True,
         allow_tags=None,
         **kw,
@@ -58,7 +63,7 @@ class BodyCleaner(Cleaner):
                 if el in self._nodes_whitelist:
                     continue
                 attrib = el.attrib
-                for aname in attrib.keys():
+                for aname in attrib:
                     if self._allow_data_attrs and aname.startswith("data-"):
                         continue
                     if aname not in safe_attrs:
@@ -67,10 +72,11 @@ class BodyCleaner(Cleaner):
         # Removal of not allowed tags, but adding double br in some cases
         # to respect the block separation
         if self._allow_tags:
-            to_remove = []
-            for el in iter_deep_first_post_order(doc):
-                if el.tag not in self._allow_tags and not self.allow_element(el):
-                    to_remove.append(el)
+            to_remove = [
+                el
+                for el in iter_deep_first_post_order(doc)
+                if el.tag not in self._allow_tags and not self.allow_element(el)
+            ]
             if to_remove:
                 if to_remove[-1] is doc:
                     # Root element cannot be removed

@@ -107,7 +107,7 @@ MUST_ANCESTORS_FOR_KEEP_CONTENT_REVERSED = {
     for descendant, root_set in sorted(MUST_ANCESTORS_FOR_KEEP_CONTENT.items())
     for root in sorted(root_set)
 }
-MUST_ANCESTORS_FOR_DROP_CONTENT = dict(figcaption={"figure"})
+MUST_ANCESTORS_FOR_DROP_CONTENT = {"figcaption": {"figure"}}
 
 # As defined in HTML5 spec: https://html.spec.whatwg.org/#phrasing-content
 # and also including some HTML 4 ones defined in lxml
@@ -177,11 +177,7 @@ HTML_UNIVERSE_TAGS = frozenset(defs.tags | PHRASING_CONTENT | ALLOWED_TAGS)
 
 # b is more or less the same than strong, and other cases.
 # See https://stackoverflow.com/questions/271743/whats-the-difference-between-b-and-strong-i-and-em
-TAG_TRANSLATIONS = dict(
-    b="strong",
-    i="em",
-    tt="code",
-)
+TAG_TRANSLATIONS = {"b": "strong", "i": "em", "tt": "code"}
 
 # Not yet used. Keeping here the trusted domains found during the development of
 # the module. At some point this list will be used to filter embeddings so

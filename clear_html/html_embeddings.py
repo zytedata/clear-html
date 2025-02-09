@@ -1,11 +1,13 @@
 """
- The goal of this module is to detect the embeddings from different
- providers and modify the
- HTML accordingly so that they can be integrated in the resultant
- HTML without change.
+The goal of this module is to detect the embeddings from different
+providers and modify the
+HTML accordingly so that they can be integrated in the resultant
+HTML without change.
 """
 
-from typing import Callable, Optional, Set
+from __future__ import annotations
+
+from typing import Callable
 
 from lxml import etree
 from lxml.html import HtmlElement
@@ -17,8 +19,8 @@ ALL_WHITELISTING_CLASSES = set(INSTAGRAM_CLASSES + TWITTER_CLASSES + FACEBOOK_CL
 
 
 def integrate_embeddings(
-    doc: HtmlElement, preprocessor: Optional[Callable] = None
-) -> Set[HtmlElement]:
+    doc: HtmlElement, preprocessor: Callable | None = None
+) -> set[HtmlElement]:
     """Integrate all embeddings found in the provided document.
     Return a set of nodes that should be preserved 'as is' in the
     clean up process"""
@@ -27,8 +29,8 @@ def integrate_embeddings(
 
 
 def _include_also_children(
-    to_whitelist: Set[HtmlElement], preprocessor: Optional[Callable] = None
-) -> Set[HtmlElement]:
+    to_whitelist: set[HtmlElement], preprocessor: Callable | None = None
+) -> set[HtmlElement]:
     """Include all children to the whitelist with an optional ``preprocessor``
     Callable that is applied to all elements in the ``to_whitelist`` input.
     """
@@ -38,15 +40,15 @@ def _include_also_children(
     return _include_subtree(to_whitelist)
 
 
-def _include_subtree(nodes: Set) -> Set[HtmlElement]:
+def _include_subtree(nodes: set) -> set[HtmlElement]:
     """Includes all nodes in subtrees of nodes in the set"""
     return {sub_node for node in nodes for sub_node in node.iter()}
 
 
-def _nodes_for_classes(doc: HtmlElement, classes: Set[str]) -> Set[HtmlElement]:
+def _nodes_for_classes(doc: HtmlElement, classes: set[str]) -> set[HtmlElement]:
     """Return a set with nodes having any of the classes in the list"""
-    whitelisted: Set[HtmlElement] = set()
-    for action, element in etree.iterwalk(doc, events=("start",)):
+    whitelisted: set[HtmlElement] = set()
+    for _, element in etree.iterwalk(doc, events=("start",)):
         assert isinstance(element, HtmlElement)  # always true in "start" events
         for cls in element.classes:
             if cls in classes:

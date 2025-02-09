@@ -1,25 +1,29 @@
-from typing import Set
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 import pytest
 from lxml.etree import tostring
-from lxml.html import HtmlElement
 
 from clear_html.html_embeddings import integrate_embeddings
 
 from .utils import string_to_html_element
 
+if TYPE_CHECKING:
+    from lxml.html import HtmlElement
 
-def normalize_nodes_to_string(nodes: Set[HtmlElement]) -> Set[str]:
+
+def normalize_nodes_to_string(nodes: set[HtmlElement]) -> set[str]:
     return {tostring(node).decode().strip() for node in nodes}
 
 
 @pytest.mark.parametrize(
-    "test_input,expected",
+    ("test_input", "expected"),
     [
         ("<div>Got no whitelisted class</div>", set()),
         (
             "<div class='instagram-media'>Insta</div>",
-            set(['<div class="instagram-media">Insta</div>']),
+            {'<div class="instagram-media">Insta</div>'},
         ),
         (
             """
@@ -29,16 +33,14 @@ def normalize_nodes_to_string(nodes: Set[HtmlElement]) -> Set[str]:
                 <span>no whitelisted class</span>
             </div>
             """,
-            set(
-                [
-                    '<div class="instagram-media">Insta</div>',
-                    '<div class="fb-post">Meta</div>',
-                ]
-            ),
+            {
+                '<div class="instagram-media">Insta</div>',
+                '<div class="fb-post">Meta</div>',
+            },
         ),
     ],
 )
-def test_integrate_embeddings(test_input: str, expected: Set[str]):
+def test_integrate_embeddings(test_input: str, expected: set[str]):
     node = string_to_html_element(test_input)
     result = integrate_embeddings(node)
 
@@ -65,10 +67,8 @@ def test_integrate_embeddings_with_preprocessor():
     """
     node = string_to_html_element(html)
     result = integrate_embeddings(node, dummy_preprocessor)
-    expected = set(
-        [
-            '<div class="instagram-media">InstX</div>',
-            '<div class="fb-post">MetX</div>',
-        ]
-    )
+    expected = {
+        '<div class="instagram-media">InstX</div>',
+        '<div class="fb-post">MetX</div>',
+    }
     assert normalize_nodes_to_string(result) == expected

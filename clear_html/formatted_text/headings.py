@@ -1,13 +1,20 @@
-from typing import AbstractSet, List
+from __future__ import annotations
 
-from lxml.html import HtmlElement, fromstring, tostring  # noqa: F401
+from typing import TYPE_CHECKING
+
+from lxml.html import fromstring, tostring  # noqa: F401
 
 from clear_html.lxml_utils import wrap_element_content_with_tag
 
+if TYPE_CHECKING:
+    from collections.abc import Set as AbstractSet
 
-def headings_nodes(doc: HtmlElement) -> List[HtmlElement]:
+    from lxml.html import HtmlElement
+
+
+def headings_nodes(doc: HtmlElement) -> list[HtmlElement]:
     return doc.xpath(
-        ".//*[self::h1 or self::h2 or self::h3 or" " self::h4 or self::h5 or self::h6]"
+        ".//*[self::h1 or self::h2 or self::h3 or self::h4 or self::h5 or self::h6]"
     )
 
 

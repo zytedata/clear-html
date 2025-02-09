@@ -1,9 +1,13 @@
+from __future__ import annotations
+
 import json
 import logging
-from pathlib import Path
-from typing import Dict
+from typing import TYPE_CHECKING
 
 import attr
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 @attr.s(auto_attribs=True)
@@ -13,21 +17,20 @@ class BodyAnnotation:
     expected_html: str
 
 
-class BodyAnnotations(Dict[str, BodyAnnotation]):
+class BodyAnnotations(dict[str, BodyAnnotation]):
     """
     Dict like structure that saves and reads from disk and that
     stores BodyAnnotation values for each item id.
     """
 
     @classmethod
-    def load(cls, path: Path) -> "BodyAnnotations":
+    def load(cls, path: Path) -> BodyAnnotations:
         if path.exists():
             with path.open("rt", encoding="utf8") as f:
                 pages = json.load(f)
                 return cls((k, BodyAnnotation(**v)) for k, v in pages.items())
         logging.info(
-            f"Body annotations file does not exist in {path}. "
-            f"Loading empty annotations"
+            f"Body annotations file does not exist in {path}. Loading empty annotations"
         )
         return cls({})
 
