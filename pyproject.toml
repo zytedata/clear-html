@@ -50,6 +50,11 @@ filename = "clear_html/__init__.py"
 search = "__version__ = \"{current_version}\""
 replace = "__version__ = \"{new_version}\""
 
+[tool.coverage.report]
+exclude_also = [
+    "if TYPE_CHECKING:",
+]
+
 [[tool.mypy.overrides]]
 module = [
     "html_text.*",
