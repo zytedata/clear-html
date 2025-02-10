@@ -173,7 +173,7 @@ def create_figures_from_isolated_figcaptions(node: HtmlElement):
             prev_content_is_paragraph = (
                 prev_content_node.tag == "p"
                 and not FIGURE_CONTENT_TAGS
-                & {n.tag for n in descendants(prev_content_node)}
+                & {cast(str, n.tag) for n in descendants(prev_content_node)}
             )
             if "figure" not in ancestors_tags and not prev_content_is_paragraph:
                 if slice.node.tag in [
@@ -194,6 +194,7 @@ def create_figures_from_isolated_figcaptions(node: HtmlElement):
                     # structure.
                     for ancestor in anctrs:
                         if ancestor.tag in MUST_ANCESTORS_FOR_KEEP_CONTENT_REVERSED:
+                            assert isinstance(ancestor.tag, str)
                             ancestor.tag = MUST_ANCESTORS_FOR_KEEP_CONTENT_REVERSED[
                                 ancestor.tag
                             ]

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Callable
+from typing import TYPE_CHECKING, Callable, cast
 
 from lxml.html import Element, HtmlElement, fromstring, tostring
 
@@ -38,7 +38,7 @@ def translate_tags(doc: HtmlElement, white_list: AbstractSet[HtmlElement] = set(
     for n in doc.iter():
         if n in white_list:
             continue
-        translation = TAG_TRANSLATIONS.get(n.tag, None)
+        translation = TAG_TRANSLATIONS.get(cast(str, n.tag), None)
         if translation is not None:
             n.tag = translation
 
@@ -408,7 +408,7 @@ def _clean_incomplete_structures(
     ancestors_tags = ancestors_tags | {doc.tag}
     for child in doc:
         _clean_incomplete_structures(child, rules, ancestors_tags, preserve_content)
-    required_ancestors = rules.get(doc.tag, None)
+    required_ancestors = rules.get(cast(str, doc.tag), None)
     if (
         required_ancestors is not None
         and not (ancestors_tags & required_ancestors)

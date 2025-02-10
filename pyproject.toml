@@ -55,17 +55,6 @@ exclude_also = [
     "if TYPE_CHECKING:",
 ]
 
-[[tool.mypy.overrides]]
-module = [
-    "html_text.*",
-]
-ignore_missing_imports = true
-
-[[tool.mypy.overrides]]
-module = [
-    "tests.*",
-]
-
 [tool.pytest.ini_options]
 junit_family = "xunit2"
 testpaths = [
