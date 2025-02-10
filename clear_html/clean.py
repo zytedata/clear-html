@@ -1,5 +1,7 @@
+from __future__ import annotations
+
 import copy
-from typing import Callable, Optional
+from typing import Callable
 
 import html_text
 from lxml.html import HtmlElement, tostring
@@ -9,8 +11,8 @@ from clear_html.html_embeddings import integrate_embeddings
 
 
 def cleaned_node_to_text(
-    node: HtmlElement, text_extractor: Optional[Callable] = None
-) -> Optional[str]:
+    node: HtmlElement, text_extractor: Callable | None = None
+) -> str | None:
     """Format the given html tree as plain text, applying particular exclusions
     only applied to plain text (i.e. remove figure captions).
     Provided node should have been already cleaned to have expected output
@@ -40,7 +42,7 @@ def cleaned_node_to_html(node: HtmlElement) -> str:
     return tostring(node, encoding="unicode", with_tail=False)
 
 
-def clean_node(node: HtmlElement, url: Optional[str] = None) -> HtmlElement:
+def clean_node(node: HtmlElement, url: str | None = None) -> HtmlElement:
     """
     Normalize the given lxml node. The resultant node contains cleaned HTML,
     with embeddings preserved. Returns a copy so that the original
@@ -60,8 +62,7 @@ def clean_node(node: HtmlElement, url: Optional[str] = None) -> HtmlElement:
     """
     node = copy.deepcopy(node)  # Need a copy if don't want to modify input node
     nodes_whitelist = integrate_embeddings(node)
-    node = clean_doc(node, url, nodes_whitelist)
-    return node
+    return clean_doc(node, url, nodes_whitelist)
 
 
 def apply_text_exclusions(node: HtmlElement):

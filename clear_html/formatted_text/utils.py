@@ -1,13 +1,15 @@
-from typing import AbstractSet, Callable, Mapping, Optional
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Callable
 
 from lxml.html import Element, HtmlElement, fromstring, tostring
 
-from clear_html.formatted_text.defs import MUST_ANCESTORS_FOR_DROP_CONTENT  # noqa: F401
-from clear_html.formatted_text.defs import MUST_ANCESTORS_FOR_KEEP_CONTENT  # noqa: F401
 from clear_html.formatted_text.defs import (
     ALLOWED_TAGS,
     CONTENT_EVEN_IF_EMPTY,
     HTML_UNIVERSE_TAGS,
+    MUST_ANCESTORS_FOR_DROP_CONTENT,  # noqa: F401
+    MUST_ANCESTORS_FOR_KEEP_CONTENT,  # noqa: F401
     PHRASING_CONTENT,
     TAG_TRANSLATIONS,
 )
@@ -18,6 +20,10 @@ from clear_html.lxml_utils import (
     prev_text,
     wrap_element_with_tag,
 )
+
+if TYPE_CHECKING:
+    from collections.abc import Mapping
+    from collections.abc import Set as AbstractSet
 
 
 def translate_tags(doc: HtmlElement, white_list: AbstractSet[HtmlElement] = set()):
@@ -177,7 +183,7 @@ def drop_tag_preserve_spacing(doc: HtmlElement, preserve_content=True):
 
         if has_text_prev and (has_text_inside or has_text_after):
             # Insert double br before
-            for i in range(2):
+            for _ in range(2):
                 doc.addprevious(Element("br"))
         if has_text_inside and has_text_after:
             # Insert brs after
@@ -192,7 +198,7 @@ def drop_tag_preserve_spacing(doc: HtmlElement, preserve_content=True):
         doc.drop_tree()
 
 
-def double_br(doc: Optional[HtmlElement]):
+def double_br(doc: HtmlElement | None):
     """True if doc and next element are "br" tags without text in between."""
     if doc is None or doc.tag != "br":
         return False
@@ -273,7 +279,7 @@ def is_phrasing_content(doc: HtmlElement):
     return doc.tag in PHRASING_CONTENT or doc.tag not in HTML_UNIVERSE_TAGS
 
 
-def group_with_previous_content_block(doc: HtmlElement) -> Optional[ChildrenSlice]:
+def group_with_previous_content_block(doc: HtmlElement) -> ChildrenSlice | None:
     """Return a ChildrenSlice that groups current node content block with
     previous content block. Return None if doc is the root.
 
@@ -314,13 +320,12 @@ def group_with_previous_content_block(doc: HtmlElement) -> Optional[ChildrenSlic
     first_with_content_idx = find_previous_non_empty_sibling(doc)
     if first_with_content_idx is not None:
         return ChildrenSlice(parent, first_with_content_idx, idx + 1)
-    elif len(parent) == 1 and not has_text(parent) and not has_tail(doc):
+    if len(parent) == 1 and not has_text(parent) and not has_tail(doc):
         return group_with_previous_content_block(parent)
-    else:
-        return None
+    return None
 
 
-def find_previous_non_empty_sibling(doc: HtmlElement) -> Optional[int]:
+def find_previous_non_empty_sibling(doc: HtmlElement) -> int | None:
     """
     >>> html = fromstring("<div><div>end</div>t<figcaption>fig</figcaption></div>")
     >>> find_previous_non_empty_sibling(html.find(".//figcaption"))
@@ -342,8 +347,7 @@ def find_previous_non_empty_sibling(doc: HtmlElement) -> Optional[int]:
         candidate_idx -= 1
     if candidate_idx >= 0:
         return candidate_idx
-    else:
-        return None
+    return None
 
 
 def _test_fn(fn):

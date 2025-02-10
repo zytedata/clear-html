@@ -1,11 +1,13 @@
+from __future__ import annotations
+
+import contextlib
 import copy
 import unicodedata
 from logging import warning
-from typing import AbstractSet, List, Optional, Tuple
+from typing import TYPE_CHECKING
 from urllib.parse import urljoin
 
 from lxml.html import Element, HtmlElement, tostring  # noqa: F401
-from lxml.html.clean import Cleaner
 
 from clear_html.formatted_text.cleaner import BodyCleaner
 from clear_html.formatted_text.defs import (
@@ -35,10 +37,15 @@ from clear_html.formatted_text.utils import (
 )
 from clear_html.lxml_utils import has_tail, has_text
 
+if TYPE_CHECKING:
+    from collections.abc import Set as AbstractSet
+
+    from lxml.html.clean import Cleaner
+
 
 def clean_doc(
     doc: HtmlElement,
-    base_url: Optional[str],
+    base_url: str | None,
     nodes_whitelist: AbstractSet[HtmlElement] = set(),
 ) -> HtmlElement:
     """Clean the tree. Mutate the doc. Root node could change,
@@ -80,9 +87,10 @@ def clean_doc(
 
 
 def _get_default_cleaner(
-    nodes_whitelist: Optional[AbstractSet[HtmlElement]] = None,
+    nodes_whitelist: AbstractSet[HtmlElement] | None = None,
 ) -> Cleaner:
-    cleaner = BodyCleaner(
+    # TODO: Use host_whitelist and whitelist_tags to control embeddings
+    return BodyCleaner(
         scripts=True,
         javascript=True,
         comments=True,
@@ -98,8 +106,6 @@ def _get_default_cleaner(
         allow_tags=ALLOWED_TAGS,
         nodes_whitelist=nodes_whitelist,
     )
-    # TODO: Use host_whitelist and whitelist_tags to control embeddings
-    return cleaner
 
 
 def paragraphy(doc: HtmlElement):
@@ -113,7 +119,7 @@ def paragraphy(doc: HtmlElement):
     """
     # Let's detect the sequences of consecutive br
     n_children = len(doc)
-    br_sequences: List[Tuple[int, int]] = []
+    br_sequences: list[tuple[int, int]] = []
     start, end = None, None
     for idx, child in enumerate(doc):
         if child.tag == "br":
@@ -141,7 +147,7 @@ def paragraphy(doc: HtmlElement):
     children = [copy.copy(c) for c in doc]
     del doc[:n_children]
 
-    last_inline_chunk: List[HtmlElement] = []
+    last_inline_chunk: list[HtmlElement] = []
     include_root_text = True
 
     def push_accumulated_content_as_p(idx):
@@ -179,7 +185,7 @@ def paragraphy(doc: HtmlElement):
     push_accumulated_content_as_p(n_children)
 
 
-def almost_pretty_format(doc: HtmlElement, url: Optional[str] = None):
+def almost_pretty_format(doc: HtmlElement, url: str | None = None):
     """Format doc to have a good looking when serialized as html.
     Only modifying first level of the body which is safe (formatting
     inner elements is not that safe). One line of separation for first
@@ -242,10 +248,8 @@ def make_links_absolute(doc: HtmlElement, base_url: str):
             # attrib is only None when el is <style> with links in the text
             assert el.text is not None
             new = el.text[:pos] + new_link + el.text[pos + len(link) :]
-            try:
+            with contextlib.suppress(ValueError):
                 el.text = new
-            except ValueError:
-                pass
         else:
             cur = el.get(attrib)
             assert cur is not None
@@ -257,7 +261,5 @@ def make_links_absolute(doc: HtmlElement, base_url: str):
                 el.set(attrib, new)
             except ValueError:
                 new = "".join(c for c in new if unicodedata.category(c) != "Cc")
-                try:
+                with contextlib.suppress(ValueError):
                     el.set(attrib, new)
-                except ValueError:
-                    pass

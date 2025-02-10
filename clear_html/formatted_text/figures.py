@@ -1,21 +1,22 @@
-from typing import AbstractSet, cast
+from __future__ import annotations
 
-from lxml.html import HtmlElement, fromstring, tostring  # noqa: F401
-from lxml.html.clean import Cleaner
+from typing import TYPE_CHECKING, cast
+
+from lxml.html import fromstring, tostring  # noqa: F401
 
 from clear_html.formatted_text.cleaner import BodyCleaner
-from clear_html.formatted_text.defs import MUST_ANCESTORS_FOR_KEEP_CONTENT  # noqa: F401
 from clear_html.formatted_text.defs import (
     ALLOWED_ATTRIBUTES,
     FIGURE_CAPTION_ALLOWED_TAGS,
     FIGURE_CONTENT_TAGS,
+    MUST_ANCESTORS_FOR_KEEP_CONTENT,  # noqa: F401
     MUST_ANCESTORS_FOR_KEEP_CONTENT_REVERSED,
     TRANSPARENT_CONTENT,
     WRAPPED_WITH_FIGURE,
 )
-from clear_html.formatted_text.utils import _test_fn  # noqa: F401
-from clear_html.formatted_text.utils import clean_incomplete_structures  # noqa: F401
 from clear_html.formatted_text.utils import (
+    _test_fn,  # noqa: F401
+    clean_incomplete_structures,  # noqa: F401
     drop_tag_preserve_spacing,
     group_with_previous_content_block,
     wrap_tags,
@@ -29,9 +30,15 @@ from clear_html.lxml_utils import (
     wrap_children_slice,
 )
 
+if TYPE_CHECKING:
+    from collections.abc import Set as AbstractSet
+
+    from lxml.html import HtmlElement
+    from lxml.html.clean import Cleaner
+
 
 def _get_figure_caption_cleaner() -> Cleaner:
-    cleaner = BodyCleaner(
+    return BodyCleaner(
         scripts=True,
         javascript=True,
         comments=True,
@@ -46,7 +53,6 @@ def _get_figure_caption_cleaner() -> Cleaner:
         safe_attrs=ALLOWED_ATTRIBUTES,
         allow_tags=FIGURE_CAPTION_ALLOWED_TAGS,
     )
-    return cleaner
 
 
 def enclose_media_within_figure(doc: HtmlElement):
@@ -91,11 +97,12 @@ def top_level_media_within_figure(
         if (child.tag == "p") and is_single_tag(child) and child not in white_list:
             single_p = child
             p_child = single_p[0]
-            if p_child.tag in FIGURE_CONTENT_TAGS:
+            if p_child.tag in FIGURE_CONTENT_TAGS or (
+                p_child.tag == "a"
+                and is_single_tag(p_child)
+                and p_child[0].tag in FIGURE_CONTENT_TAGS
+            ):
                 single_p.tag = "figure"
-            elif p_child.tag == "a" and is_single_tag(p_child):
-                if p_child[0].tag in FIGURE_CONTENT_TAGS:
-                    single_p.tag = "figure"
 
 
 def infer_img_url_from_data_src_attr(doc: HtmlElement):
@@ -186,10 +193,7 @@ def create_figures_from_isolated_figcaptions(node: HtmlElement):
                     # take care later of removing the rest of the incomplete
                     # structure.
                     for ancestor in anctrs:
-                        if (
-                            ancestor.tag
-                            in MUST_ANCESTORS_FOR_KEEP_CONTENT_REVERSED.keys()
-                        ):
+                        if ancestor.tag in MUST_ANCESTORS_FOR_KEEP_CONTENT_REVERSED:
                             ancestor.tag = MUST_ANCESTORS_FOR_KEEP_CONTENT_REVERSED[
                                 ancestor.tag
                             ]

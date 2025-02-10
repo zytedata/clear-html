@@ -1,8 +1,13 @@
+from __future__ import annotations
+
 import copy  # noqa: F401
-from typing import Any, Generator, List, Optional
+from typing import TYPE_CHECKING, Any
 
 import attr
 from lxml.html import Element, HtmlElement, fromstring, tostring  # noqa: F401
+
+if TYPE_CHECKING:
+    from collections.abc import Generator
 
 
 def wrap_element_content_with_tag(doc: HtmlElement, tag: str) -> HtmlElement:
@@ -56,7 +61,7 @@ def wrap_element_with_tag(doc: HtmlElement, tag: str) -> HtmlElement:
     return wrapper
 
 
-def str_has_content(text: Optional[str]):
+def str_has_content(text: str | None):
     return bool(text and text.strip())
 
 
@@ -86,10 +91,7 @@ def prev_text(doc: HtmlElement) -> str:
     previous = doc.getprevious()
     if previous is None:
         parent = doc.getparent()
-        if parent is None:
-            text = ""
-        else:
-            text = parent.text or ""
+        text = "" if parent is None else parent.text or ""
     else:
         text = previous.tail or ""
     return text
@@ -143,8 +145,8 @@ def wrap_children_slice(slice: ChildrenSlice, tag: str) -> HtmlElement:
 
 
 def ancestors(
-    node: HtmlElement, max: Optional[int] = None, stop_at: Optional[HtmlElement] = None
-) -> List[HtmlElement]:
+    node: HtmlElement, max: int | None = None, stop_at: HtmlElement | None = None
+) -> list[HtmlElement]:
     """Return the ancestors of a node ordered by distance.
 
     >>> tags = lambda x: list(map(lambda n: n.tag, x))
@@ -166,7 +168,7 @@ def ancestors(
     ['d', 'c', 'b']
 
     """
-    ret: List[HtmlElement] = []
+    ret: list[HtmlElement] = []
     while (parent := node.getparent()) is not None and (max is None or len(ret) < max):
         ret.append(parent)
         node = parent
@@ -175,14 +177,14 @@ def ancestors(
     return ret
 
 
-def _traverse_until_level(doc: HtmlElement, level: int, max_level: Optional[int]):
+def _traverse_until_level(doc: HtmlElement, level: int, max_level: int | None):
     if max_level is None or level <= max_level:
         yield doc
     for child in doc:
         yield from _traverse_until_level(child, level + 1, max_level)
 
 
-def descendants(node: HtmlElement, max_level=None) -> List[HtmlElement]:
+def descendants(node: HtmlElement, max_level=None) -> list[HtmlElement]:
     """Return the descendant nodes of a given nodes until a particular level.
     All descendants are returned If no ``max_level`` is provided.
 
