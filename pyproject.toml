@@ -1,17 +1,17 @@
 [build-system]
-requires = ["setuptools"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling>=1.27.0"]
+build-backend = "hatchling.build"
 
 [project]
 name = "clear-html"
 description = "Clean and normalize HTML."
 authors = [{name = "Zyte Group Ltd", email = "info@zyte.com"}]
 readme = "README.rst"
-license = {file = "LICENSE"}
+license = "MIT"
+license-files = ["LICENSE"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: BSD License",
     "Natural Language :: English",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
@@ -34,12 +34,6 @@ dynamic = ["version"]
 [project.urls]
 Source = "https://github.com/zytedata/clear-html"
 
-[tool.setuptools.dynamic]
-version = {attr = "clear_html.__version__"}
-
-[tool.setuptools.package-data]
-clear_html = ["py.typed"]
-
 [tool.bumpversion]
 current_version = "0.4.1"
 commit = true
@@ -53,6 +47,17 @@ replace = "__version__ = \"{new_version}\""
 
 [tool.coverage.run]
 branch = true
+
+[tool.hatch.version]
+path = "clear_html/__init__.py"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/clear_html",
+    "/tests",
+    "/CHANGES.rst",
+    "/tox.ini",
+]
 
 [tool.pytest.ini_options]
 junit_family = "xunit2"
