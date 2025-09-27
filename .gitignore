@@ -10,6 +10,7 @@
 
 # IDE
 /.idea/
+/.vscode/
 
 .mypy_cache/
 .cache/
@@ -22,3 +23,4 @@ htmlcov/
 # Test and coverage
 test-results
 coverage-html
+coverage.xml

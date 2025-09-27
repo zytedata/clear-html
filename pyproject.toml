@@ -20,6 +20,7 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Programming Language :: Python :: Implementation :: CPython",
 ]
 requires-python = ">=3.9"
@@ -50,10 +51,8 @@ filename = "clear_html/__init__.py"
 search = "__version__ = \"{current_version}\""
 replace = "__version__ = \"{new_version}\""
 
-[tool.coverage.report]
-exclude_also = [
-    "if TYPE_CHECKING:",
-]
+[tool.coverage.run]
+branch = true
 
 [tool.pytest.ini_options]
 junit_family = "xunit2"
