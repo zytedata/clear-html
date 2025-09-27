@@ -59,6 +59,13 @@ include = [
     "/tox.ini",
 ]
 
+[tool.mypy]
+strict = true
+
+[[tool.mypy.overrides]]
+module = "html_text"
+implicit_reexport = true  # to be fixed
+
 [tool.pytest.ini_options]
 junit_family = "xunit2"
 testpaths = [

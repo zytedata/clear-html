@@ -111,7 +111,7 @@ def _get_default_cleaner(
     )
 
 
-def paragraphy(doc: HtmlElement):
+def paragraphy(doc: HtmlElement) -> None:
     """Ensures all textual content is inside a paragraph for first level.
     Removes sequences of consecutive br tags enclosing surroundings into
     paragraphs. Note that these kind of double
@@ -153,7 +153,7 @@ def paragraphy(doc: HtmlElement):
     last_inline_chunk: list[HtmlElement] = []
     include_root_text = True
 
-    def push_accumulated_content_as_p(idx):
+    def push_accumulated_content_as_p(idx: int) -> None:
         # Pushes content in last_inline_chunk in
         # a new paragraph.
         nonlocal include_root_text, doc, children, last_inline_chunk
@@ -188,7 +188,7 @@ def paragraphy(doc: HtmlElement):
     push_accumulated_content_as_p(n_children)
 
 
-def almost_pretty_format(doc: HtmlElement, url: str | None = None):
+def almost_pretty_format(doc: HtmlElement, url: str | None = None) -> None:
     """Format doc to have a good looking when serialized as html.
     Only modifying first level of the body which is safe (formatting
     inner elements is not that safe). One line of separation for first
@@ -234,7 +234,7 @@ def almost_pretty_format(doc: HtmlElement, url: str | None = None):
                 child.text = child.text.rstrip()
 
 
-def make_links_absolute(doc: HtmlElement, base_url: str):
+def make_links_absolute(doc: HtmlElement, base_url: str) -> None:
     """Like doc.make_links_absolute which ignores errors,
     but also does not fail on urls with escape chars, skipping them instead.
     """

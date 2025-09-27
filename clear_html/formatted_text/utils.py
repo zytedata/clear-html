@@ -25,8 +25,15 @@ if TYPE_CHECKING:
     from collections.abc import Mapping
     from collections.abc import Set as AbstractSet
 
+    from lxml.etree import QName
 
-def translate_tags(doc: HtmlElement, white_list: AbstractSet[HtmlElement] = set()):
+    # from lxml-stubs
+    _TagName = str | bytes | bytearray | QName
+
+
+def translate_tags(
+    doc: HtmlElement, white_list: AbstractSet[HtmlElement] = set()
+) -> None:
     """Translate tag names (i.e. b -> strong). Mutates the doc.
     Nodes in the white list are ignored.
 
@@ -68,11 +75,11 @@ def set_article_tag_as_root(doc: HtmlElement) -> HtmlElement:
 
 def wrap_tags(
     doc: HtmlElement,
-    to_be_enclosed_tags: AbstractSet,
+    to_be_enclosed_tags: AbstractSet[_TagName],
     enclosing_tag: str,
     node_check: Callable[[HtmlElement], bool] = lambda x: True,
-    transparent_tags: AbstractSet = set(),
-):
+    transparent_tags: AbstractSet[_TagName] = set(),
+) -> None:
     """Enclose the elements with tag `to_be_enclosed_tags` within a tag
     `enclosing_tag` if they are not already enclosed, that is, if `enclosing_tag`
     is not already an ancestor. All transparent tags without more content
@@ -93,12 +100,12 @@ def wrap_tags(
 
 def _wrap_tags_with(
     doc: HtmlElement,
-    to_be_enclosed_tags: AbstractSet,
+    to_be_enclosed_tags: AbstractSet[_TagName],
     enclosing_tag: str,
-    ancestors_tags: AbstractSet = set(),
+    ancestors_tags: AbstractSet[_TagName] = set(),
     node_check: Callable[[HtmlElement], bool] = lambda x: True,
-    transparent_tags: AbstractSet = set(),
-):
+    transparent_tags: AbstractSet[_TagName] = set(),
+) -> None:
     ancestors_tags = ancestors_tags | {doc.tag}
     if (
         (enclosing_tag not in ancestors_tags)
@@ -128,8 +135,8 @@ def _wrap_tags_with(
 
 
 def remove_empty_tags(
-    doc: HtmlElement, white_list: AbstractSet[str] = set(), _root=True
-):
+    doc: HtmlElement, white_list: AbstractSet[str] = set(), _root: bool = True
+) -> None:
     """Removes empty tags, but skipping the `white_list` ones
 
     >>> html = fromstring("<article><p><em></em></p></article>")
@@ -148,7 +155,7 @@ def remove_empty_tags(
         doc.drop_tag()
 
 
-def drop_tag_preserve_spacing(doc: HtmlElement, preserve_content=True):
+def drop_tag_preserve_spacing(doc: HtmlElement, preserve_content: bool = True) -> None:
     """Drops a tag keeping its content. If element to be removed
     is a block element, leading or trailing double br tags would
     be introduced to preserve spacing. If preserve_content is
@@ -198,7 +205,7 @@ def drop_tag_preserve_spacing(doc: HtmlElement, preserve_content=True):
         doc.drop_tree()
 
 
-def double_br(doc: HtmlElement | None):
+def double_br(doc: HtmlElement | None) -> bool:
     """True if doc and next element are "br" tags without text in between."""
     if doc is None or doc.tag != "br":
         return False
@@ -238,7 +245,7 @@ def has_no_content(doc: HtmlElement) -> bool:
 
 def is_empty(
     doc: HtmlElement, tags_with_content_even_if_empty: AbstractSet[str] = set()
-):
+) -> bool:
     """Checks if given doc is an empty tag or tag formed with empty tags.
     ``tags_with_content_even_if_empty`` tags are considered as having content
     even if empty.
@@ -270,7 +277,7 @@ def is_empty(
     )
 
 
-def is_phrasing_content(doc: HtmlElement):
+def is_phrasing_content(doc: HtmlElement) -> bool:
     """'Phrasing content is the text of the document, as well as elements that
     mark up that text at the intra-paragraph level'
     (see https://html.spec.whatwg.org/#phrasing-content). This method return
@@ -350,8 +357,8 @@ def find_previous_non_empty_sibling(doc: HtmlElement) -> int | None:
     return None
 
 
-def _test_fn(fn):
-    def func(doc):
+def _test_fn(fn: Callable[[HtmlElement], None]) -> Callable[[str], str]:
+    def func(doc: str) -> str:
         html = fromstring(doc)
         fn(html)
         return tostring(html).decode()
@@ -362,9 +369,9 @@ def _test_fn(fn):
 def clean_incomplete_structures(
     doc: HtmlElement,
     rules: Mapping[str, AbstractSet[str]],
-    preserve_content=True,
+    preserve_content: bool = True,
     white_list: AbstractSet[HtmlElement] = set(),
-):
+) -> None:
     """Drop tags (keeping content) of incomplete structures.
     For example, removes a td element if not belonging to any table.
     Never clean the base element. If preserve_content is false then nodes
@@ -401,10 +408,10 @@ def clean_incomplete_structures(
 def _clean_incomplete_structures(
     doc: HtmlElement,
     rules: Mapping[str, AbstractSet[str]],
-    ancestors_tags: AbstractSet = set(),
-    preserve_content=True,
+    ancestors_tags: AbstractSet[_TagName] = set(),
+    preserve_content: bool = True,
     white_list: AbstractSet[HtmlElement] = set(),
-):
+) -> None:
     ancestors_tags = ancestors_tags | {doc.tag}
     for child in doc:
         _clean_incomplete_structures(child, rules, ancestors_tags, preserve_content)
@@ -417,7 +424,7 @@ def _clean_incomplete_structures(
         drop_tag_preserve_spacing(doc, preserve_content)
 
 
-def kill_tag_content(doc: HtmlElement, tag: str):
+def kill_tag_content(doc: HtmlElement, tag: str) -> None:
     """Removes the content of all these tags found in the doc
 
     >>> def kill(html):

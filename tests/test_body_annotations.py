@@ -12,7 +12,7 @@ from clear_html.html_embeddings import integrate_embeddings
 FIXTURES_PATH = Path(__file__).parent / "fixtures" / "body_formatting_annotations.json"
 
 
-def test_load_and_save(tmpdir):
+def test_load_and_save(tmpdir: Path) -> None:
     path = tmpdir / "ann.json"
     expected = BodyAnnotations()
     expected["two"] = BodyAnnotation(
@@ -31,7 +31,7 @@ def test_load_and_save(tmpdir):
     BodyAnnotations.load(FIXTURES_PATH).items(),
     ids=lambda fixture_id: fixture_id if type(fixture_id) is str else "",
 )
-def test_body_formatting(fixture_id: str, item: BodyAnnotation):
+def test_body_formatting(fixture_id: str, item: BodyAnnotation) -> None:
     """Checks that body formatting as html is right"""
     node = fromstring(item.raw_html, base_url=item.url)
     nodes_whitelist = integrate_embeddings(node)
@@ -46,7 +46,9 @@ def test_body_formatting(fixture_id: str, item: BodyAnnotation):
     ids=lambda fixture_id: fixture_id if type(fixture_id) is str else "",
 )
 @pytest.mark.xfail  # Fails because https://github.com/TeamHG-Memex/html-text/issues/16
-def test_body_as_text_same_after_cleaning(fixture_id: str, item: BodyAnnotation):
+def test_body_as_text_same_after_cleaning(
+    fixture_id: str, item: BodyAnnotation
+) -> None:
     """
     Checks that extracting text from article body is equal after cleaning the html
     """

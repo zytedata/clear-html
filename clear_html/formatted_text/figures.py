@@ -55,7 +55,7 @@ def _get_figure_caption_cleaner() -> Cleaner:
     )
 
 
-def enclose_media_within_figure(doc: HtmlElement):
+def enclose_media_within_figure(doc: HtmlElement) -> None:
     """Ensures all media (images, videos, etc) are enclosed within figures.
     If possible, images with
     a link also includes the link within the figure element."""
@@ -69,7 +69,7 @@ def enclose_media_within_figure(doc: HtmlElement):
 
 def top_level_media_within_figure(
     doc: HtmlElement, white_list: AbstractSet[HtmlElement] = set()
-):
+) -> None:
     """Enclose top level isolated multimedia into figures. In other words,
     paragraphs containing only a single media element are replaced by a figure.
     Nodes in the white list are ignored.
@@ -90,7 +90,7 @@ def top_level_media_within_figure(
     '<div><figure><audio><source></source></audio></figure></div>'
     """
 
-    def is_single_tag(el: HtmlElement):
+    def is_single_tag(el: HtmlElement) -> bool:
         return len(el) == 1 and not has_text(el) and not has_tail(el[0])
 
     for child in doc:
@@ -105,7 +105,7 @@ def top_level_media_within_figure(
                 single_p.tag = "figure"
 
 
-def infer_img_url_from_data_src_attr(doc: HtmlElement):
+def infer_img_url_from_data_src_attr(doc: HtmlElement) -> None:
     """Fills src attribute from data-src for img tags.
     It is common to see img tags without src attribute but with data-src
 
@@ -119,7 +119,7 @@ def infer_img_url_from_data_src_attr(doc: HtmlElement):
             el.attrib["src"] = cast("str", el.get("data-src"))
 
 
-def create_figures_from_isolated_figcaptions(node: HtmlElement):
+def create_figures_from_isolated_figcaptions(node: HtmlElement) -> None:
     """Wraps isolated figcaptions with the content above and form a new figure.
     Mutates node.
 
@@ -207,7 +207,7 @@ def create_figures_from_isolated_figcaptions(node: HtmlElement):
                 fuse_figcaptions(new_figure)
 
 
-def fuse_figcaptions(figure: HtmlElement):
+def fuse_figcaptions(figure: HtmlElement) -> None:
     """Fuses first block of consecutive figcaptions and remove the rest found.
 
     >>> fuse = _test_fn(fuse_figcaptions)
@@ -244,7 +244,7 @@ def fuse_figcaptions(figure: HtmlElement):
             drop_tag_preserve_spacing(child)
 
 
-def clean_figcaptions_html(node: HtmlElement):
+def clean_figcaptions_html(node: HtmlElement) -> None:
     """Simplifies figcapion html
     >>> html = fromstring("<div><figcaption><table><p><strong>hey</strong></p></table></figcaption></div>")
     >>> clean_figcaptions_html(html)
@@ -256,7 +256,7 @@ def clean_figcaptions_html(node: HtmlElement):
         clean(caption)
 
 
-def remove_figures_without_content(doc: HtmlElement):
+def remove_figures_without_content(doc: HtmlElement) -> None:
     """Removes figures that has no content apart of the figure caption. This
     can happen for some pages that inject the content with JS
 
@@ -292,7 +292,7 @@ def remove_figures_without_content(doc: HtmlElement):
             drop_tag_preserve_spacing(figure, preserve_content=False)
 
 
-def clean_double_br_above_figcaption(doc: HtmlElement):
+def clean_double_br_above_figcaption(doc: HtmlElement) -> None:
     """Some weird cases like when figure is implemented with tables
     we can end having a double br before figcaptions. For example
     in this case

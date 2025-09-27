@@ -37,7 +37,7 @@ class BodyAnnotations(dict[str, BodyAnnotation]):
         )
         return cls({})
 
-    def save(self, path: Path):
+    def save(self, path: Path) -> None:
         as_dict = {id_: attr.asdict(ann) for id_, ann in self.items()}
         path.write_text(
             json.dumps(as_dict, sort_keys=True, ensure_ascii=False, indent=4),

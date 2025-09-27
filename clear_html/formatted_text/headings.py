@@ -13,8 +13,11 @@ if TYPE_CHECKING:
 
 
 def headings_nodes(doc: HtmlElement) -> list[HtmlElement]:
-    return doc.xpath(
-        ".//*[self::h1 or self::h2 or self::h3 or self::h4 or self::h5 or self::h6]"
+    return cast(
+        "list[HtmlElement]",
+        doc.xpath(
+            ".//*[self::h1 or self::h2 or self::h3 or self::h4 or self::h5 or self::h6]"
+        ),
     )
 
 
@@ -25,7 +28,7 @@ def min_heading(doc: HtmlElement) -> int:
 
 def normalize_headings_level(
     doc: HtmlElement, white_list: AbstractSet[HtmlElement] = set()
-):
+) -> None:
     """Normalizes headings in the doc so that the lowest level is always 2.
     If six levels document is found, the last level is replaced by
     ``<p><strong></strong></p>``
