@@ -203,7 +203,7 @@ def test_drop_tag_preserve_spacing(
     html: str, selector: str, expected_output: str
 ) -> None:
     node: HtmlElement = fromstring(html)
-    drop_tag_preserve_spacing(cast(HtmlElement, node.find(selector)))
+    drop_tag_preserve_spacing(cast("HtmlElement", node.find(selector)))
     assert tostring(node, encoding="unicode") == expected_output
 
 
@@ -249,6 +249,6 @@ def test_drop_tag_preserve_spacing_but_not_content(
 ) -> None:
     node: HtmlElement = fromstring(html)
     drop_tag_preserve_spacing(
-        cast(HtmlElement, node.find(selector)), preserve_content=False
+        cast("HtmlElement", node.find(selector)), preserve_content=False
     )
     assert tostring(node, encoding="unicode") == expected_output

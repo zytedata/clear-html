@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import contextlib
 import copy
+import logging
 import unicodedata
-from logging import warning
 from typing import TYPE_CHECKING
 from urllib.parse import urljoin
 
@@ -41,6 +41,9 @@ if TYPE_CHECKING:
     from collections.abc import Set as AbstractSet
 
     from lxml.html.clean import Cleaner
+
+
+logger = logging.getLogger(__name__)
 
 
 def clean_doc(
@@ -210,14 +213,14 @@ def almost_pretty_format(doc: HtmlElement, url: str | None = None):
     """
     url = url or ""
     if has_text(doc):
-        warning(
+        logger.warning(
             f"Unexpected text found '{doc.text}' for url '{url}' in root"
             f" node or article body. Removing it and going ahead."
         )
     doc.text = "\n\n"
     for child in doc:
         if has_tail(child):
-            warning(
+            logger.warning(
                 f"Unexpected text found '{doc.tail}' for url '{url}' in "
                 f"the tail of a first level child of the article body node. "
                 f"Removing it and going ahead."

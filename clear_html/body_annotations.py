@@ -10,6 +10,9 @@ if TYPE_CHECKING:
     from pathlib import Path
 
 
+logger = logging.getLogger(__name__)
+
+
 @attr.s(auto_attribs=True)
 class BodyAnnotation:
     url: str
@@ -29,7 +32,7 @@ class BodyAnnotations(dict[str, BodyAnnotation]):
             with path.open("rt", encoding="utf8") as f:
                 pages = json.load(f)
                 return cls((k, BodyAnnotation(**v)) for k, v in pages.items())
-        logging.info(
+        logger.info(
             f"Body annotations file does not exist in {path}. Loading empty annotations"
         )
         return cls({})

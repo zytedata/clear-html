@@ -20,7 +20,7 @@ def headings_nodes(doc: HtmlElement) -> list[HtmlElement]:
 
 def min_heading(doc: HtmlElement) -> int:
     """Return the min heading level in the document"""
-    return min([int(cast(str, h.tag)[1:]) for h in headings_nodes(doc)], default=1)
+    return min([int(cast("str", h.tag)[1:]) for h in headings_nodes(doc)], default=1)
 
 
 def normalize_headings_level(
@@ -48,7 +48,7 @@ def normalize_headings_level(
             continue
         if h.tag != "h6":
             # Headings starting in h2
-            h.tag = "h" + str(int(cast(str, h.tag)[1:]) - root_level + 2)
+            h.tag = "h" + str(int(cast("str", h.tag)[1:]) - root_level + 2)
         else:
             # Six heading replaced by <p><strong></strong></p>
             h.tag = "p"

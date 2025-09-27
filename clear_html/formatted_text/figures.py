@@ -116,7 +116,7 @@ def infer_img_url_from_data_src_attr(doc: HtmlElement):
     """
     for el in doc.iterfind(".//img"):
         if not el.get("src") and el.get("data-src"):
-            el.attrib["src"] = cast(str, el.get("data-src"))
+            el.attrib["src"] = cast("str", el.get("data-src"))
 
 
 def create_figures_from_isolated_figcaptions(node: HtmlElement):
@@ -173,7 +173,7 @@ def create_figures_from_isolated_figcaptions(node: HtmlElement):
             prev_content_is_paragraph = (
                 prev_content_node.tag == "p"
                 and not FIGURE_CONTENT_TAGS
-                & {cast(str, n.tag) for n in descendants(prev_content_node)}
+                & {cast("str", n.tag) for n in descendants(prev_content_node)}
             )
             if "figure" not in ancestors_tags and not prev_content_is_paragraph:
                 if slice.node.tag in [
