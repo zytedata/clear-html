@@ -115,7 +115,7 @@ class ChildrenSlice:
     end: int
 
 
-def wrap_children_slice(slice: ChildrenSlice, tag: str) -> HtmlElement:
+def wrap_children_slice(slice: ChildrenSlice, tag: str) -> HtmlElement:  # noqa: A002
     """Wraps a slice of children into the same tag.
     Return new created tag.
 
@@ -145,7 +145,9 @@ def wrap_children_slice(slice: ChildrenSlice, tag: str) -> HtmlElement:
 
 
 def ancestors(
-    node: HtmlElement, max: int | None = None, stop_at: HtmlElement | None = None
+    node: HtmlElement,
+    max: int | None = None,  # noqa: A002
+    stop_at: HtmlElement | None = None,
 ) -> list[HtmlElement]:
     """Return the ancestors of a node ordered by distance.
 

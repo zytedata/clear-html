@@ -157,8 +157,8 @@ def create_figures_from_isolated_figcaptions(node: HtmlElement):
     '<article><figure><img href="link1"><br><br><figcaption>caption1</figcaption></figure></article>'
     """
     for caption in node.xpath(".//figcaption"):
-        slice = group_with_previous_content_block(caption)
-        if slice:
+        slice_ = group_with_previous_content_block(caption)
+        if slice_:
             anctrs = ancestors(caption, stop_at=node)
             ancestors_tags = [n.tag for n in anctrs]
             # Avoiding creating the figure if previous selected content is
@@ -169,14 +169,14 @@ def create_figures_from_isolated_figcaptions(node: HtmlElement):
             # finally a figure was formed with a the paragraph before, which
             # is wrong. It is safe then not to form the figure and so the caption
             # will be just removed.
-            prev_content_node = slice.node[slice.start]
+            prev_content_node = slice_.node[slice_.start]
             prev_content_is_paragraph = (
                 prev_content_node.tag == "p"
                 and not FIGURE_CONTENT_TAGS
                 & {cast("str", n.tag) for n in descendants(prev_content_node)}
             )
             if "figure" not in ancestors_tags and not prev_content_is_paragraph:
-                if slice.node.tag in [
+                if slice_.node.tag in [
                     "table",
                     "tbody",
                     "thead",
@@ -199,7 +199,7 @@ def create_figures_from_isolated_figcaptions(node: HtmlElement):
                                 ancestor.tag
                             ]
                             break
-                new_figure = wrap_children_slice(slice, "figure")
+                new_figure = wrap_children_slice(slice_, "figure")
                 # Case when figure was at the same level that caption.
                 # This avoids having figures inside figures in this case.
                 for inner_figure in new_figure.xpath(".//figure"):
