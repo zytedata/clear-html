@@ -19,7 +19,7 @@ ALL_WHITELISTING_CLASSES = set(INSTAGRAM_CLASSES + TWITTER_CLASSES + FACEBOOK_CL
 
 
 def integrate_embeddings(
-    doc: HtmlElement, preprocessor: Callable | None = None
+    doc: HtmlElement, preprocessor: Callable[[HtmlElement], None] | None = None
 ) -> set[HtmlElement]:
     """Integrate all embeddings found in the provided document.
     Return a set of nodes that should be preserved 'as is' in the
@@ -29,7 +29,8 @@ def integrate_embeddings(
 
 
 def _include_also_children(
-    to_whitelist: set[HtmlElement], preprocessor: Callable | None = None
+    to_whitelist: set[HtmlElement],
+    preprocessor: Callable[[HtmlElement], None] | None = None,
 ) -> set[HtmlElement]:
     """Include all children to the whitelist with an optional ``preprocessor``
     Callable that is applied to all elements in the ``to_whitelist`` input.
@@ -40,7 +41,7 @@ def _include_also_children(
     return _include_subtree(to_whitelist)
 
 
-def _include_subtree(nodes: set) -> set[HtmlElement]:
+def _include_subtree(nodes: set[HtmlElement]) -> set[HtmlElement]:
     """Includes all nodes in subtrees of nodes in the set"""
     return {sub_node for node in nodes for sub_node in node.iter()}
 

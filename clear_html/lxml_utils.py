@@ -7,7 +7,7 @@ import attr
 from lxml.html import Element, HtmlElement, fromstring, tostring  # noqa: F401
 
 if TYPE_CHECKING:
-    from collections.abc import Generator
+    from collections.abc import Generator, Iterable
 
 
 def wrap_element_content_with_tag(doc: HtmlElement, tag: str) -> HtmlElement:
@@ -61,15 +61,15 @@ def wrap_element_with_tag(doc: HtmlElement, tag: str) -> HtmlElement:
     return wrapper
 
 
-def str_has_content(text: str | None):
+def str_has_content(text: str | None) -> bool:
     return bool(text and text.strip())
 
 
-def has_text(doc: HtmlElement):
+def has_text(doc: HtmlElement) -> bool:
     return str_has_content(doc.text)
 
 
-def has_tail(doc: HtmlElement):
+def has_tail(doc: HtmlElement) -> bool:
     return str_has_content(doc.tail)
 
 
@@ -115,7 +115,7 @@ class ChildrenSlice:
     end: int
 
 
-def wrap_children_slice(slice: ChildrenSlice, tag: str) -> HtmlElement:
+def wrap_children_slice(slice: ChildrenSlice, tag: str) -> HtmlElement:  # noqa: A002
     """Wraps a slice of children into the same tag.
     Return new created tag.
 
@@ -145,7 +145,9 @@ def wrap_children_slice(slice: ChildrenSlice, tag: str) -> HtmlElement:
 
 
 def ancestors(
-    node: HtmlElement, max: int | None = None, stop_at: HtmlElement | None = None
+    node: HtmlElement,
+    max: int | None = None,  # noqa: A002
+    stop_at: HtmlElement | None = None,
 ) -> list[HtmlElement]:
     """Return the ancestors of a node ordered by distance.
 
@@ -177,14 +179,16 @@ def ancestors(
     return ret
 
 
-def _traverse_until_level(doc: HtmlElement, level: int, max_level: int | None):
+def _traverse_until_level(
+    doc: HtmlElement, level: int, max_level: int | None
+) -> Iterable[HtmlElement]:
     if max_level is None or level <= max_level:
         yield doc
     for child in doc:
         yield from _traverse_until_level(child, level + 1, max_level)
 
 
-def descendants(node: HtmlElement, max_level=None) -> list[HtmlElement]:
+def descendants(node: HtmlElement, max_level: int | None = None) -> list[HtmlElement]:
     """Return the descendant nodes of a given nodes until a particular level.
     All descendants are returned If no ``max_level`` is provided.
 

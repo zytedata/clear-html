@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from lxml import etree
 from lxml.html import HtmlElement, defs
@@ -38,8 +38,8 @@ class BodyCleaner(Cleaner):
         self,
         nodes_whitelist: AbstractSet[HtmlElement] | None = None,
         allow_data_attrs: bool = True,
-        allow_tags=None,
-        **kw,
+        allow_tags: AbstractSet[str] | None = None,
+        **kw: Any,
     ):
         # Short-circuit the safe_attrs to be able to provide a smarter filtering
         self._body_safe_attrs = kw.pop("safe_attrs", defs.safe_attrs)
@@ -55,7 +55,7 @@ class BodyCleaner(Cleaner):
             kw[option] = False
         super().__init__(**kw)
 
-    def __call__(self, doc: HtmlElement):  # type: ignore[override]
+    def __call__(self, doc: HtmlElement) -> None:  # type: ignore[override]
         super().__call__(doc)
         if self._body_safe_attrs_only:
             safe_attrs = self._body_safe_attrs
@@ -90,7 +90,7 @@ class BodyCleaner(Cleaner):
                     el = to_remove.pop()
                     drop_tag_preserve_spacing(el)
 
-    def allow_element(self, el):
+    def allow_element(self, el: HtmlElement) -> bool:
         if el in self._nodes_whitelist:
             return True
         return super().allow_element(el)

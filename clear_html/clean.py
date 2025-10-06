@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import copy
-from typing import Callable
+from typing import TYPE_CHECKING, Callable
 
 import html_text
 from lxml.html import HtmlElement, tostring
@@ -9,9 +9,12 @@ from lxml.html import HtmlElement, tostring
 from clear_html.formatted_text import clean_doc
 from clear_html.html_embeddings import integrate_embeddings
 
+if TYPE_CHECKING:
+    from collections.abc import Set as AbstractSet
+
 
 def cleaned_node_to_text(
-    node: HtmlElement, text_extractor: Callable | None = None
+    node: HtmlElement, text_extractor: Callable[[HtmlElement], str] | None = None
 ) -> str | None:
     """Format the given html tree as plain text, applying particular exclusions
     only applied to plain text (i.e. remove figure captions).
@@ -65,13 +68,13 @@ def clean_node(node: HtmlElement, url: str | None = None) -> HtmlElement:
     return clean_doc(node, url, nodes_whitelist)
 
 
-def apply_text_exclusions(node: HtmlElement):
+def apply_text_exclusions(node: HtmlElement) -> None:
     """Apply some additional exclusions that are needed to export the
     body as text. Modify given node."""
     exclude_figcaption(node)
 
 
-def exclude_figcaption(node: HtmlElement):
+def exclude_figcaption(node: HtmlElement) -> None:
     # Exclude html figcaption tag
     to_exclude = set(node.xpath(".//figcaption"))
     # Never exclude the node itself
@@ -79,7 +82,7 @@ def exclude_figcaption(node: HtmlElement):
     _drop_trees(to_exclude)
 
 
-def _drop_trees(to_exclude):
+def _drop_trees(to_exclude: AbstractSet[HtmlElement]) -> None:
     for el in to_exclude:
         if el.getparent() is not None:  # Parent cannot be removed
             el.drop_tree()

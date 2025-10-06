@@ -39,7 +39,7 @@ from clear_html.formatted_text.utils import drop_tag_preserve_spacing
         ),
     ],
 )
-def test_paragraphy(html, expected_output):
+def test_paragraphy(html: str, expected_output: str) -> None:
     root = fromstring(html)
     paragraphy(root)
     assert tostring(root, encoding="unicode") == expected_output
@@ -66,7 +66,7 @@ def test_paragraphy(html, expected_output):
         ),
     ],
 )
-def test_enclose_media_within_figures(html, expected_output):
+def test_enclose_media_within_figures(html: str, expected_output: str) -> None:
     root = fromstring(html)
     enclose_media_within_figure(root)
     assert tostring(root, encoding="unicode") == expected_output
@@ -151,7 +151,7 @@ def test_enclose_media_within_figures(html, expected_output):
         ),
     ],
 )
-def test_body_cleaner(html, expected_output):
+def test_body_cleaner(html: str, expected_output: str) -> None:
     root = fromstring(html)
     cleaner = _get_default_cleaner()
     cleaner(root)
@@ -203,7 +203,7 @@ def test_drop_tag_preserve_spacing(
     html: str, selector: str, expected_output: str
 ) -> None:
     node: HtmlElement = fromstring(html)
-    drop_tag_preserve_spacing(cast(HtmlElement, node.find(selector)))
+    drop_tag_preserve_spacing(cast("HtmlElement", node.find(selector)))
     assert tostring(node, encoding="unicode") == expected_output
 
 
@@ -249,6 +249,6 @@ def test_drop_tag_preserve_spacing_but_not_content(
 ) -> None:
     node: HtmlElement = fromstring(html)
     drop_tag_preserve_spacing(
-        cast(HtmlElement, node.find(selector)), preserve_content=False
+        cast("HtmlElement", node.find(selector)), preserve_content=False
     )
     assert tostring(node, encoding="unicode") == expected_output
