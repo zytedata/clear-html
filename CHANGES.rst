@@ -1,6 +1,16 @@
 Changes
 =======
 
+0.5.0 (unreleased)
+------------------
+
+* Added support for Python 3.12-3.14.
+* Dropped support for Python 3.8.
+* Improved memory usage.
+* Migrated the build system to ``hatchling``.
+* Improved type hints.
+* CI improvements.
+
 0.4.1 (2024-04-30)
 ------------------
 
