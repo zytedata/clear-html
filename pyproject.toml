@@ -7,7 +7,7 @@ name = "clear-html"
 description = "Clean and normalize HTML."
 authors = [{name = "Zyte Group Ltd", email = "info@zyte.com"}]
 readme = "README.rst"
-license = "MIT"
+license = "Apache-2.0"
 license-files = ["LICENSE"]
 classifiers = [
     "Development Status :: 3 - Alpha",
