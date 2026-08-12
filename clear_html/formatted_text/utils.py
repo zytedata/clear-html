@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Callable, cast
+from typing import TYPE_CHECKING, cast
 
 from lxml.html import Element, HtmlElement, fromstring, tostring
 
@@ -22,7 +22,7 @@ from clear_html.lxml_utils import (
 )
 
 if TYPE_CHECKING:
-    from collections.abc import Mapping
+    from collections.abc import Callable, Mapping
     from collections.abc import Set as AbstractSet
 
     from lxml.etree import QName

@@ -1,7 +1,8 @@
-# This workflow will install Python dependencies, run tests and lint with a variety of Python versions
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
-
 name: tox
+
+permissions:
+  contents: read
+
 on: [push, pull_request]
 
 jobs:
@@ -12,19 +13,18 @@ jobs:
       fail-fast: false
       matrix:
         include:
-        - python-version: "3.9"
-        - python-version: "3.9"
-          env:
-            TOXENV: pinned
         - python-version: "3.10"
+          toxenv: pinned
         - python-version: "3.11"
         - python-version: "3.12"
         - python-version: "3.13"
         - python-version: "3.14"
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        persist-credentials: false
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v6
+      uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
@@ -34,10 +34,13 @@ jobs:
     - name: tox
       run: |
         tox -e ${{ matrix.toxenv || 'py' }}
-    - name: coverage
-      uses: codecov/codecov-action@v5
+    - name: Upload coverage report
+      uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+    - name: Upload test results
+      if: ${{ !cancelled() }}
+      uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
       with:
-        token: ${{ secrets.CODECOV_TOKEN }}
+        report_type: test_results
 
   check:
     runs-on: ubuntu-latest
@@ -45,12 +48,14 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ["3.14"]
-        tox-job: ["lint", "mypy", "twinecheck"]
+        toxenv: ["lint", "mypy", "twinecheck"]
 
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        persist-credentials: false
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v6
+      uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
@@ -59,4 +64,4 @@ jobs:
         python -m pip install tox
     - name: tox
       run: |
-        tox -e ${{ matrix.tox-job }}
+        tox -e ${{ matrix.toxenv }}
