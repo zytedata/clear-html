@@ -21,6 +21,6 @@ htmlcov/
 .ipynb_checkpoints
 
 # Test and coverage
-test-results
+*.junit.xml
 coverage-html
 coverage.xml

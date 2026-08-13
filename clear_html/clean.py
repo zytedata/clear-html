@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import copy
-from typing import TYPE_CHECKING, Callable
+from typing import TYPE_CHECKING
 
 import html_text
 from lxml.html import HtmlElement, tostring
@@ -10,6 +10,7 @@ from clear_html.formatted_text import clean_doc
 from clear_html.html_embeddings import integrate_embeddings
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
     from collections.abc import Set as AbstractSet
 
 
